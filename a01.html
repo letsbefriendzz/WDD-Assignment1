@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Web Dev A-01</title>
+</head>
+<body>
+    <script type="text/javascript">
+        /*
+
+        This is a simple
+
+        */
+        console.log("*************************\nRYAN ENNS / 7216757\nWEB DESIGN & DEVELOPMENT\nASSIGNMENT #1\n*************************")
+        let userName = "";
+        let maxNum = 0;
+        let randomNum = 0;
+
+        function enterName()
+        {
+            //Clear the error message, if there is one.
+            document.getElementById("error").innerText = "";
+
+            //Create a variable to represent the text field.
+            //I'm realizing I've given the <input> tag 
+            let inp = document.getElementById("input");
+            
+            //If the name contains digits, it's invalid!
+            if(/[\d]/.test(inp.value) || inp.value.length === 0)
+            {
+                //Display the error message...
+                document.getElementById("error").innerText = "That's an invalid name!";
+                //...make it red!
+                document.getElementById("error").style.color = "red";
+                //Log it to the console!
+                console.log("Bad Input!")
+            }
+            else
+            {
+                //Assign the userName variable the name that the user has entered.
+                userName = inp.value;
+
+                //Change the header to ask for a maximum number.
+                document.getElementById("heading").innerText = "Alright, " + userName + ".";
+
+                //Change the subheading text.
+                document.getElementById("head2").innerText = "Enter a maximum number.";
+
+                //Change the form background text to reflect the header change.
+                document.getElementById("input").placeholder = "Max Number"
+
+                //Change the function that the button calls from the present fuinction to enterMax();
+                document.getElementById("button").onclick = enterMax;
+            }
+
+            //Dump the value collected to the console.
+            console.log(inp.value);
+
+            //Clear the text box of previous input.
+            inp.value = "";
+        }
+
+        function enterMax()
+        {
+            let inp = document.getElementById("input");
+            
+            if(!/^\d+$/.test(inp.value))
+            {
+                console.log("BAD")
+            }
+            else
+            {
+                //Assign the maximum number value.
+                maxNum = Number(inp.value);
+
+                //Change the heading.
+                document.getElementById("heading").innerText = "Go ahead, take a guess.";
+
+                //Change the subheading.
+                document.getElementById("head2").innerText = "Anything between 1 and " + maxNum + ".";
+
+                //Change the text placeholder in the form.
+                document.getElementById("input").placeholder = "Guess";
+
+                //Change the submit button text.
+                document.getElementById("button").innerText = "Make This Guess";
+
+                //Change the function executed by the submit button.
+                document.getElementById("button").onclick = enterGuess;
+            }
+
+            console.log(inp.value);
+            inp.value = "";
+        }
+
+        function enterGuess()
+        {
+
+        }
+    </script>
+
+    <h2 id="heading" style="text-align: center; font-size: 5vw; margin: 0;">Hello.</h2>
+    <h4 id="head2" style="text-align: center; font-size: 2vw; margin: 0; margin-bottom: 1%;">Enter your name.</h4>
+    <div id="inpDiv" style="display: flex; justify-content: center;">
+        <input type="text" id="input" placeholder="Name" style="text-align: center; height: 5vh; font-size: 25pt;">
+    </div>
+        <br><br>
+    <div style="display: flex; justify-content: center;">
+        <button onclick="enterName()" id="button" style="font-size: 25pt; padding: 2vh;">Submit</button>
+    </div>
+    <p id="error" style="font-size: 25pt; text-align: center;"></p>
+</body>
+</html>
