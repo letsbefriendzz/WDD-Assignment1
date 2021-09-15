@@ -3,53 +3,89 @@
 <head>
     <title>Web Dev A-01</title>
 </head>
-<body>
+<body style="background-color: lightgray;">
     <script type="text/javascript">
         /*
-
-        This is a simple
-
+            This is a simple meme!
         */
         console.log("*************************\nRYAN ENNS / 7216757\nWEB DESIGN & DEVELOPMENT\nASSIGNMENT #1\n*************************")
         let userName = "";
         let maxNum = 0;
         let randomNum = 0;
 
+        //this is useless!
+        function einputHeaders()
+        {
+            //this is exists exclusively to be consistent with the other header updating
+            //functions that are below this. I don't actually need this because this page
+            //will init with these values, and they are, in theory, never used beyond the
+            //first load of the page.
+            document.getElementById("heading").innerText = "Hello.";
+            document.getElementById("head2").innerText = "Enter your name."
+        }
+
+        //These functions exist because the headers aren't updated with the respective data collection
+        //functions! What an awful design! So we're compensating with this trash!
+        function minputHeaders()
+        {
+            //Change the header to ask for a maximum number.
+            document.getElementById("heading").innerText = "Alright, " + userName + ".";
+
+            //Change the subheading text.
+            document.getElementById("head2").innerText = "Enter a maximum number.";
+
+            //Change the form background text to reflect the header change.
+            document.getElementById("input").placeholder = "Max Number"
+
+            //Change the function that the button calls from the present fuinction to enterMax();
+            document.getElementById("button").onclick = enterMax;
+        }
+
+        function ginputHeaders()
+        {
+            //Change the heading.
+            document.getElementById("heading").innerText = "Go ahead, take a guess.";
+
+            //Change the subheading.
+            document.getElementById("head2").innerText = "Anything between 1 and " + maxNum + ".";
+
+            //Change the text placeholder in the form.
+            document.getElementById("input").placeholder = "Guess";
+
+            //Change the submit button text.
+            document.getElementById("button").innerText = "Make This Guess";
+
+            //Change the function executed by the submit button.
+            document.getElementById("button").onclick = enterGuess;
+        }
+
         function enterName()
         {
-            //Clear the error message, if there is one.
-            document.getElementById("error").innerText = "";
+            //Clear the statusmsg message, if there is one.
+            document.getElementById("statusmsg").innerText = "";
 
             //Create a variable to represent the text field.
             //I'm realizing I've given the <input> tag 
             let inp = document.getElementById("input");
             
             //If the name contains digits, it's invalid!
-            if(/[\d]/.test(inp.value) || inp.value.length === 0)
+            if(/[\d]/.test(inp.value))
             {
-                //Display the error message...
-                document.getElementById("error").innerText = "That's an invalid name!";
-                //...make it red!
-                document.getElementById("error").style.color = "red";
+                //Display the statusmsg message...
+                document.getElementById("statusmsg").innerText = "That's an invalid name!";
                 //Log it to the console!
                 console.log("Bad Input!")
+            }
+            else if(inp.value.length === 0)
+            {
+                document.getElementById("statusmsg").innerText = "You need to enter a name!"
             }
             else
             {
                 //Assign the userName variable the name that the user has entered.
                 userName = inp.value;
 
-                //Change the header to ask for a maximum number.
-                document.getElementById("heading").innerText = "Alright, " + userName + ".";
-
-                //Change the subheading text.
-                document.getElementById("head2").innerText = "Enter a maximum number.";
-
-                //Change the form background text to reflect the header change.
-                document.getElementById("input").placeholder = "Max Number"
-
-                //Change the function that the button calls from the present fuinction to enterMax();
-                document.getElementById("button").onclick = enterMax;
+                minputHeaders();
             }
 
             //Dump the value collected to the console.
@@ -61,10 +97,14 @@
 
         function enterMax()
         {
+            minputHeaders();
+
             let inp = document.getElementById("input");
             
-            if(!/^\d+$/.test(inp.value))
+            //regex lol
+            if(!/^\d+$/.test(inp.value) || inp.value < 2)
             {
+                document.getElementById("statusmsg").innerText + "That's an invalid number!";
                 console.log("BAD")
             }
             else
@@ -72,29 +112,55 @@
                 //Assign the maximum number value.
                 maxNum = Number(inp.value);
 
-                //Change the heading.
-                document.getElementById("heading").innerText = "Go ahead, take a guess.";
-
-                //Change the subheading.
-                document.getElementById("head2").innerText = "Anything between 1 and " + maxNum + ".";
-
-                //Change the text placeholder in the form.
-                document.getElementById("input").placeholder = "Guess";
-
-                //Change the submit button text.
-                document.getElementById("button").innerText = "Make This Guess";
-
-                //Change the function executed by the submit button.
-                document.getElementById("button").onclick = enterGuess;
+                ginputHeaders();
             }
 
-            console.log(inp.value);
+            randomNum = Math.floor((Math.random()*maxNum) + 1);
+            console.log("Random Number:" + randomNum);
             inp.value = "";
         }
 
         function enterGuess()
         {
 
+            if(/[/d]/.test(document.getElementById("input").value))
+            {
+                console.log("bad guess!")
+            }
+
+            if(document.getElementById("input").value == randomNum)
+            {
+                console.log("Success");
+
+                //Make the status message a success notif and green
+                document.getElementById("statusmsg").innerText = "You guessed right!";
+                document.getElementById("statusmsg").style.color = "green";
+
+                //Graying out the input box and offering to play again.
+                //this is the first of two lines giving you trouble.
+                document.getElementById("input").disabled = "true";
+                document.getElementById("button").innerText = "Play Again";
+                document.getElementById("button").onclick = playAgain;
+
+                //Changing the heading and subheading to reflect the winners' status.
+                document.getElementById("heading").innerText = "You Guess Right!";
+                document.getElementById("head2").innerText = "Great Job!";
+            }
+
+            document.getElementById("input").value = "";
+        }
+
+        //a function designed to reinit all html elements to play the game again,
+        //not reasking for a player's name.
+        function playAgain()
+        {
+            minputHeaders();
+            console.log("false!")
+
+            //THIS LINE MAKES ME ANGRY!
+            //this is the second of the two lines giving you trouble.
+            document.getElementById("input").disabled = "false";
+            document.getElementById("button").onclick = enterMax;
         }
     </script>
 
@@ -107,6 +173,6 @@
     <div style="display: flex; justify-content: center;">
         <button onclick="enterName()" id="button" style="font-size: 25pt; padding: 2vh;">Submit</button>
     </div>
-    <p id="error" style="font-size: 25pt; text-align: center;"></p>
+    <p id="statusmsg" style="font-size: 25pt; text-align: center; color: red;"></p>
 </body>
 </html>
