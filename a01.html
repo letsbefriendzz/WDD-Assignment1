@@ -13,17 +13,6 @@
         let maxNum = 0;
         let randomNum = 0;
 
-        //this is useless!
-        function einputHeaders()
-        {
-            //this is exists exclusively to be consistent with the other header updating
-            //functions that are below this. I don't actually need this because this page
-            //will init with these values, and they are, in theory, never used beyond the
-            //first load of the page.
-            document.getElementById("heading").innerText = "Hello.";
-            document.getElementById("head2").innerText = "Enter your name."
-        }
-
         //These functions exist because the headers aren't updated with the respective data collection
         //functions! What an awful design! So we're compensating with this trash!
         function minputHeaders()
@@ -68,15 +57,7 @@
             //I'm realizing I've given the <input> tag 
             let inp = document.getElementById("input");
             
-            //If the name contains digits, it's invalid!
-            if(/[\d]/.test(inp.value))
-            {
-                //Display the statusmsg message...
-                document.getElementById("statusmsg").innerText = "That's an invalid name!";
-                //Log it to the console!
-                console.log("Bad Input!")
-            }
-            else if(inp.value.length === 0)
+            if(inp.value.length === 0)
             {
                 document.getElementById("statusmsg").innerText = "You need to enter a name!"
             }
