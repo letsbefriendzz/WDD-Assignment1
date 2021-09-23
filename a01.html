@@ -1,20 +1,55 @@
+<!--
+    
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Web Dev A-01</title>
 </head>
 <body style="background-color: lightgray;">
+    <h2 id="heading" style="text-align: center; font-size: 5vw; margin: 0;">Hello.</h2>
+    <h4 id="head2" style="text-align: center; font-size: 2vw; margin: 0; margin-bottom: 1%;">Enter your name.</h4>
+    <div id="inpDiv" style="display: flex; justify-content: center;">
+        <input type="text" id="input" placeholder="Name" style="text-align: center; height: 5vh; font-size: 25pt;">
+    </div>
+        <br><br>
+    <div style="display: flex; justify-content: center;">
+        <button onclick="enterName()" id="button" style="font-size: 25pt; padding: 2vh;">Submit</button>
+    </div>
+    <p id="statusmsg" style="font-size: 25pt; text-align: center; color: red;"></p>
+
     <script type="text/javascript">
+        //Dump information about this program to the console
         /*
-            This is a simple meme!
+        document.getElementById("input").addEventListener("keyup", function(event)
+        {
+            console.log("keypressed\n");
+            if(event.code === 13)
+            {
+                console.log("ENTER PRESSED");
+                event.preventDefault();
+                document.getElementById("input").onclick();
+            }
+        });
         */
         console.log("*************************\nRYAN ENNS / 7216757\nWEB DESIGN & DEVELOPMENT\nASSIGNMENT #1\n*************************")
-        let userName = "";
-        let maxNum = 0;
-        let randomNum = 0;
 
-        //These functions exist because the headers aren't updated with the respective data collection
-        //functions! What an awful design! So we're compensating with this trash!
+        //init the variables I'll be using in this program...
+
+        //userName represents the name of the use
+        let userName = "";
+
+        //maxNum represents the highest number that will be generated in the random number generation sequence
+        let maxNum = 0;
+
+        //min number represents the lowest number that the randomly generated number *could* be.
+        let minNum = 1;
+        
+        //randomNum is meant to store the value of the random number that is generated.
+        let randomNum = 0;
+        
+        /*
+        */
         function minputHeaders()
         {
             //Change the header to ask for a maximum number.
@@ -30,13 +65,22 @@
             document.getElementById("button").onclick = enterMax;
         }
 
+        /*
+        */
+        function setGuessHeader()
+        {
+            document.getElementById("head2").innerText = "Anything between " + minNum + " and " + maxNum + ".";
+        }
+
+        /*
+        */
         function ginputHeaders()
         {
             //Change the heading.
             document.getElementById("heading").innerText = "Go ahead, take a guess.";
 
             //Change the subheading.
-            document.getElementById("head2").innerText = "Anything between 1 and " + maxNum + ".";
+            setGuessHeader();
 
             //Change the text placeholder in the form.
             document.getElementById("input").placeholder = "Guess";
@@ -48,6 +92,26 @@
             document.getElementById("button").onclick = enterGuess;
         }
 
+        /*
+        NAME    : enterName()
+        DESC    :
+            This function is responsible for dealing with the entering of the user's name
+            present exclusively on initial loadup of the page. The first purpose this function
+            serves is to clear the statusmsg, in case a previous attempt at entering a name
+            was rejected. Then, we declare an input variable to hold the document element that
+            has the ID value of "input". The first thing we check is if the value the user enters
+            has a length of zero. If it does, that means the string is empty and this is not a
+            valid name to pass. We alert the user using the statusmsg <p/> tag, and clear the
+            text box value. If it is not a zero-length string, that means that the user has
+            entered *something*. This also means, however, that non-alphabet characters can be
+            used for names. This will be useful for exactly one person, being Elon Musk's child
+            who is named X Æ A-12. Of course, this is a common name format and we should accomodate
+            Elon's tomfoolery in our code. Finally, if the user has passed a valid name, the
+            minputHeaders() function is called, which sets the headers and submit button to
+            prompt for the maximum number.
+        PARM    : //
+        RETURNS : //
+        */
         function enterName()
         {
             //Clear the statusmsg message, if there is one.
@@ -76,84 +140,156 @@
             inp.value = "";
         }
 
+        /*
+        NAME    : enterMax()
+        DESC    :
+            This function is responsible for handling the entering of the maximum number
+            that will define the range of the random number generator. First, the function
+            sets the correct headers by calling minputHeaders(). It then declares a variable
+            for the input text field for the sake of saving time. It then checks, according
+            to a regex query, if the value passed is exclusively composed of numbers. If it
+            is, then the maxNum variable is assigned a parsed inp.value, the headers are
+            updated for the guessing section of the game, and the random number is dumped
+            in console if you want to be a dirty cheater and get the value easily.
+        PARM    : //
+        RETURNS : //
+        */
         function enterMax()
         {
+            //Upate the headers
             minputHeaders();
 
             let inp = document.getElementById("input");
             
             //regex lol
-            if(!/^\d+$/.test(inp.value) || inp.value < 2)
+            if(!/^\d+$/.test(inp.value) || inp.value <= minNum)
             {
-                document.getElementById("statusmsg").innerText + "That's an invalid number!";
+                document.getElementById("statusmsg").innerText = "That's an invalid number!";
                 console.log("BAD")
             }
             else
             {
                 //Assign the maximum number value.
                 maxNum = Number(inp.value);
-
-                ginputHeaders();
+                randomNum = Math.floor((Math.random()*maxNum) + 1);
+                console.log("Random Number:" + randomNum);
             }
-
-            randomNum = Math.floor((Math.random()*maxNum) + 1);
-            console.log("Random Number:" + randomNum);
             inp.value = "";
+            ginputHeaders();
         }
 
+        /*
+        NAME    : success()
+        DESC    :
+            This function is called when the user has successfully guessed the random number
+            that was generated. It exclusively updates DOM elements. This includes the statusmsg
+            <p/> tag, the button text contents, setting the input text box to be invisible, and
+            the header & subheader to congratulate the user for their ingenious guessing abilities.
+        PARM    : //
+        RETURNS : //
+        */
+        function success()
+        {
+            //Make the status message a success notif and green
+            document.getElementById("statusmsg").innerText = "You guessed right!";
+            document.getElementById("statusmsg").style.color = "green";
+
+            //Make the input box invisible
+            document.getElementById("input").style.opacity = "0.0";
+
+            //Make the button say play again, and reference the play again function
+            document.getElementById("button").innerText = "Play Again";
+            document.getElementById("button").onclick = playAgain;
+
+            //Changing the heading and subheading to reflect the winners' status.
+            document.getElementById("heading").innerText = "You Guessed Right!";
+            document.getElementById("head2").innerText = "Great Job!";
+
+            document.body.style.backgroundColor="green";
+        }
+
+        /*
+        NAME    : enterGuess()
+        DESC    :
+            This function is responsible for handling process of determining if a user's guess is
+            correct or incorrect. First, it checks if the value entered in the input text field is
+            a digit. If it is not exclusively comprised of digits, it's considered a bad value. The
+            user is notified of this. Otherwise, we check if the value inputted by the user is within
+            the acceptable range. If it is not, again, we notify the user of their poor performance
+            thus far and give them another shot. If it is within the valid range, we then determine
+            If it is greater than, less than, or equal to the random number. The maxNum and minNum
+            values respectively are updated in any non-correct guess situations. Thus, if the user
+            has a guessing range between 1-10, they guess 5, and the number is 7, we help them by
+            informing them that their new guessing range is between 5 and 10. We narrow down the
+            possible values because we are generous and want our users to win. Finally, no matter
+            what happens, we clear the input text box.
+        PARM    : //
+        RETURNS : //
+        */
         function enterGuess()
         {
-
+            //If the guess is not a digit, it's a bad guess!
             if(/[/d]/.test(document.getElementById("input").value))
             {
                 console.log("bad guess!")
             }
 
-            if(document.getElementById("input").value == randomNum)
+            if(document.getElementById("input").value < minNum || document.getElementById("input").value > maxNum)
             {
-                console.log("Success");
-
-                //Make the status message a success notif and green
-                document.getElementById("statusmsg").innerText = "You guessed right!";
-                document.getElementById("statusmsg").style.color = "green";
-
-                //Graying out the input box and offering to play again.
-                //this is the first of two lines giving you trouble.
-                document.getElementById("input").disabled = "true";
-                document.getElementById("button").innerText = "Play Again";
-                document.getElementById("button").onclick = playAgain;
-
-                //Changing the heading and subheading to reflect the winners' status.
-                document.getElementById("heading").innerText = "You Guess Right!";
-                document.getElementById("head2").innerText = "Great Job!";
+                document.getElementById("statusmsg").innerText = "Your allowable guessing range is any value between " + minNum + " and " + maxNum + "!";
             }
+            else
+            {
+                if(document.getElementById("input").value == randomNum)
+                {
+                    console.log("Success");
+                    success();
+                    return;
+                }
+                else if(document.getElementById("input").value < randomNum)
+                {
+                    console.log(document.getElementById("input").value);
+                    minNum = Number(document.getElementById("input").value);
+                }
+                else if(document.getElementById("input").value > randomNum)
+                {
+                    maxNum = Number(document.getElementById("input").value);
+                }
+
+                setGuessHeader();
+                document.getElementById("statusmsg").innerText = "";
+            }
+
+            //Update the guess subheader no matter what, just prevents code duplication at the
+            //sole cost of calling it more often that it would otherwise need to be.
 
             document.getElementById("input").value = "";
         }
 
-        //a function designed to reinit all html elements to play the game again,
-        //not reasking for a player's name.
+        /*
+        NAME    : playAgain()
+        DESC    :
+            Once a user has demonstrated that their brain is as large as a watermelon
+            by successfully guessing the value that was randomly generated within their
+            custom range, they are presented with an option to play the game again. If
+            they so choose to do so, this funciton is called. It's basically used to
+            reset the DOM elements to the page presented when entering the maximum number
+            value. This includes making the input text box visible and empty, making the 
+            onclick event of the button to be the enterMax function, updating the 
+            statusmsg to empty, and making the background color of the webpage light gray.
+        PARM    : //
+        RETURNS : //
+        */
         function playAgain()
         {
             minputHeaders();
-            console.log("false!")
-
-            //THIS LINE MAKES ME ANGRY!
-            //this is the second of the two lines giving you trouble.
-            document.getElementById("input").disabled = "false";
+            //style.opacity supremacy!
+            document.getElementById("input").style.opacity = "1.0"
             document.getElementById("button").onclick = enterMax;
+            document.getElementById("statusmsg").innerText = "";
+            document.getElementById("input").value = "";
+            document.body.style.backgroundColor = "lightgray";
         }
     </script>
-
-    <h2 id="heading" style="text-align: center; font-size: 5vw; margin: 0;">Hello.</h2>
-    <h4 id="head2" style="text-align: center; font-size: 2vw; margin: 0; margin-bottom: 1%;">Enter your name.</h4>
-    <div id="inpDiv" style="display: flex; justify-content: center;">
-        <input type="text" id="input" placeholder="Name" style="text-align: center; height: 5vh; font-size: 25pt;">
-    </div>
-        <br><br>
-    <div style="display: flex; justify-content: center;">
-        <button onclick="enterName()" id="button" style="font-size: 25pt; padding: 2vh;">Submit</button>
-    </div>
-    <p id="statusmsg" style="font-size: 25pt; text-align: center; color: red;"></p>
 </body>
 </html>
